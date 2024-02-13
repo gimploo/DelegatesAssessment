@@ -83,54 +83,54 @@ class Program
             switch(input)
             {
                 case "/sms add":
-                    user = ReadUserInput(userRepository);
+                    user = ReadUserInput(userRepository, true);
                     if (user == null) break;
                     smsService.Add(user);
                 break;
                 case "/email add":
-                    user = ReadUserInput(userRepository);
+                    user = ReadUserInput(userRepository, true);
                     if (user == null) break;
                     emailService.Add(user);
                 break;
                 case "/push add":
-                    user = ReadUserInput(userRepository);
+                    user = ReadUserInput(userRepository, true);
                     if (user == null) break;
                     notificationService.Add(user);
                 break;
 
                 case "/sms remove":
-                    user = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
                     if (user == null) break;
                     smsService.Remove(user);
                 break;
                 case "/email remove":
-                    user = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
                     if (user == null) break;
                     emailService.Remove(user);
                 break;
                 case "/push remove":
-                    user = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
                     if (user == null) break;
                     notificationService.Remove(user);
                 break;
 
                 case "/sms update":
-                    user = ReadUserInput(userRepository, true);
-                    newUser = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
+                    newUser = ReadUserInput(userRepository);
                     if (user == null) break;
                     if (newUser == null) break;
                     smsService.Update(user, newUser);
                 break;
                 case "/email update":
-                    user = ReadUserInput(userRepository, true);
-                    newUser = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
+                    newUser = ReadUserInput(userRepository);
                     if (user == null) break;
                     if (newUser == null) break;
                     emailService.Update(user, newUser);
                 break;
                 case "/push update":
-                    user = ReadUserInput(userRepository, true);
-                    newUser = ReadUserInput(userRepository, true);
+                    user = ReadUserInput(userRepository);
+                    newUser = ReadUserInput(userRepository);
                     if (user == null) break;
                     if (newUser == null) break;
                     notificationService.Update(user, newUser);
@@ -160,13 +160,13 @@ class Program
 
         User ? user = repo.GetAll().ToList().Find((e) => e.Id == Id);
 
-        if (!toCreateNew && (user != null))
+        if (toCreateNew && (user != null))
         {
             Console.WriteLine("That id already exist!");
             return null;
         } 
 
-        if (toCreateNew && (user == null))
+        if (!toCreateNew && (user == null))
         {
             Console.WriteLine("That id doesn`t exist!");
             return null;
