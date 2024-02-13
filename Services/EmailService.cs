@@ -18,7 +18,7 @@ namespace DelegatesAssessment.Services
 
         public void Add(User user)
         {
-            Console.WriteLine($"EmailService adding {{{user.ToString()}}} ...");
+            Console.WriteLine($"EmailService adding {user.ToString()} ...");
             _repo.Add(user);
         }
 
