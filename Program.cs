@@ -29,14 +29,10 @@ class Program
             });
 
         Console.WriteLine("Before sorted");
-        users.ForEach((user) => {
-            Console.Write(user.ToString());
-        });
+        users.ForEach((user) => Console.Write(user.ToString()));
 
         Console.WriteLine("\nAfter sorted");
-        sorted.ForEach((user) => {
-            Console.Write(user.ToString());
-        });
+        sorted.ForEach((user) => Console.Write(user.ToString()));
 
     }
 
@@ -46,30 +42,20 @@ class Program
         $@"
             COMMANDS
             --------
-            /push add               := Add user (using push notification)
-            /push update            := Update user (using push notification)
-            /push remove            := Remove user (using push notification)
+            /add               := Add user 
+            /update            := Update user
+            /remove            := Remove user
 
-            /email add              := Add user (using email )
-            /email update           := Update user (using email )           
-            /email remove           := Remove user (using email )
-
-            /sms add                := Add user (using sms)
-            /sms update             := Update user (using sms)
-            /sms remove             := Remove user (using sms)
-            
-            /help                   := Display available commands
-            /exit                   := Exit program
-";
+            /help              := Display available commands
+            /exit              := Exit program
+        ";
 
         UserRepository userRepository = new UserRepository();
 
-        EmailService emailService = 
-            new EmailService(userRepository);
-        PushNotificationService notificationService = 
-            new PushNotificationService(userRepository);
-        SMSService smsService = 
-            new SMSService(userRepository);
+        UserService userService = new UserService(
+            new EmailService(userRepository),
+            new PushNotificationService(userRepository),
+            new SMSService(userRepository));
 
 
         Console.WriteLine(COMMANDS);
@@ -82,58 +68,24 @@ class Program
             string input = Console.ReadLine();
             switch(input)
             {
-                case "/sms add":
+                case "/add":
                     user = ReadUserInput(userRepository, true);
                     if (user == null) break;
-                    smsService.Add(user);
-                break;
-                case "/email add":
-                    user = ReadUserInput(userRepository, true);
-                    if (user == null) break;
-                    emailService.Add(user);
-                break;
-                case "/push add":
-                    user = ReadUserInput(userRepository, true);
-                    if (user == null) break;
-                    notificationService.Add(user);
+                    userService.OnAdd(user);
                 break;
 
-                case "/sms remove":
+                case "/remove":
                     user = ReadUserInput(userRepository);
                     if (user == null) break;
-                    smsService.Remove(user);
-                break;
-                case "/email remove":
-                    user = ReadUserInput(userRepository);
-                    if (user == null) break;
-                    emailService.Remove(user);
-                break;
-                case "/push remove":
-                    user = ReadUserInput(userRepository);
-                    if (user == null) break;
-                    notificationService.Remove(user);
+                    userService.OnRemove(user);
                 break;
 
-                case "/sms update":
+                case "/update":
                     user = ReadUserInput(userRepository);
                     newUser = ReadUserInput(userRepository);
                     if (user == null) break;
                     if (newUser == null) break;
-                    smsService.Update(user, newUser);
-                break;
-                case "/email update":
-                    user = ReadUserInput(userRepository);
-                    newUser = ReadUserInput(userRepository);
-                    if (user == null) break;
-                    if (newUser == null) break;
-                    emailService.Update(user, newUser);
-                break;
-                case "/push update":
-                    user = ReadUserInput(userRepository);
-                    newUser = ReadUserInput(userRepository);
-                    if (user == null) break;
-                    if (newUser == null) break;
-                    notificationService.Update(user, newUser);
+                    userService.OnUpdate(user, newUser);
                 break;
                  
                 case "/help":
